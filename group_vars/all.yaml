@@ -1,8 +1,8 @@
 ---
 wp_db_host: "{{ hostvars['db'].ansible_host }}"
-ansible_user: datascientest
+ansible_user: ansible_user
 ansible_ssh_private_key_file: ~/.ansible/key.pem
-ansible_become_pass: Datascientest2024
-wp_db_name: "datascientest"
-wp_db_password: "datascientest"
-wp_db_user: "datascientest"
+ansible_become_pass: ansible_pass
+wp_db_name: "wp_db"
+wp_db_password: "wp_db_pass"
+wp_db_user: "wp_db_user"
