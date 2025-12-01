@@ -6,21 +6,21 @@ from mysql.connector import Error
 import requests
 
 # --- IP addresses ---
-WEB_SERVER_IP = "35.180.87.58"  # web server IP
-DB_SERVER_IP = "172.31.37.215"   # DB server IP
+WEB_SERVER_IP = "xx.xx.xx.xx"  # web server IP
+DB_SERVER_IP = "xx.xx.xx.xx"   # DB server IP
 
 # --- DNS name for HTTP check ---
-WEB_SERVER_DNS = "ec2-51-44-4-181.eu-west-3.compute.amazonaws.com"
+WEB_SERVER_DNS = "example.com"
 
 # --- SSH / Web Server Info ---
 WEB_SERVER_USER = "datascientest"
-WEB_SERVER_KEY_PATH = "/home/datascientest/Rajab-datascientest_keypair.pem"  # path to private key
+WEB_SERVER_KEY_PATH = "~/keypair.pem"  # path to private key
 
 # --- MySQL DB Info ---
 DB_PORT = 3306
-DB_USER = "datascientest"
-DB_PASSWORD = "datascientest"
-DB_NAME = "datascientest"
+DB_USER = "wp_db_user"
+DB_PASSWORD = "wp_db_pass"
+DB_NAME = "wp_db"
 
 def test_tcp_connection_from_web_to_db():
     """
