@@ -1,0 +1,17 @@
+---
+# defaults file for wordpress
+wp_webserver: nginx
+wp_db_host: "{{ hostvars['db'].ansible_host }}"
+wp_db_charset: "utf8"
+wp_db_collate: ""
+wp_table_prefix: "datascientest_"
+wp_debug: false
+wp_admin_email: "rajab_30@hotmail.com"
+
+#wordpress
+wp_version: latest
+wp_install_dir: "/var/www/html"
+
+#nginx
+wp_sitename: ec2-51-44-4-181.eu-west-3.compute.amazonaws.com
+

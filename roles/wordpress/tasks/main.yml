@@ -1,0 +1,105 @@
+---
+# tasks file for wordpress
+- name: WordPress - PHP Installation
+  apt:
+    pkg:
+      [
+        "php-pear",
+        "php-fpm",
+        "php-dev",
+        "php-zip",
+        "php-curl",
+        "php-xmlrpc",
+        "php-gd",
+        "php-mysql",
+        "php-mbstring",
+        "php-xml",
+      ]
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+
+- name: Wordpress - Nginx Installation
+  apt:
+    pkg: nginx
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+  when: wp_webserver == "nginx"
+
+- name: WordPress - Erase elements at /var/www/html/
+  file:
+    path: /var/www/html/index.html
+    state: absent
+  when: wp_install_dir == "/var/www/html"
+
+- name: WordPress - Erasing of index.nginx-debian in /var/www/html/
+  file:
+    path: /var/www/html/index.nginx-debian.html
+    state: absent
+  when: wp_install_dir == "/var/www/html"
+
+- name: WordPress - Erasing of wp-config.php in /var/www/html/
+  file:
+    path: /var/www/html/wp-config.php
+    state: absent
+  when: wp_install_dir == "/var/www/html"
+
+- name: WordPress - Directory creation
+  file:
+    path: "{{ wp_install_dir }}"
+    state: directory
+    mode: 0755
+
+- name: WordPress - Archive extraction in {{ wp_install_dir }}
+  unarchive:
+    src: "http://wordpress.org/wordpress-{{ wp_version }}.tar.gz"
+    dest: "{{ wp_install_dir }}"
+    remote_src: yes
+
+- name: WordPress - Retrieval of random salt for wp-config.php
+  delegate_to: localhost
+  uri:
+    url: https://api.wordpress.org/secret-key/1.1/salt/
+    return_content: yes
+  become: False
+  failed_when: false
+  register: "wp_salt_array"
+
+- name: WordPress - Definition of fact wp_salt
+  set_fact:
+    wp_salt: "{{ wp_salt_array.content }}"
+
+- name: Remove existing wp-config.php first
+  file:
+    path: "{{ wp_install_dir }}/wp-config.php"
+    state: absent
+  ignore_errors: yes
+
+- name: WordPress - Copy wp-config.php file
+  template:
+    src: wp-config.php.j2
+    dest: "{{ wp_install_dir }}/wp-config.php"
+    owner: www-data
+    group: www-data
+    mode: '0644'
+
+- name: WordPress - Change owner of the installation directory
+  file:
+    path: "{{ wp_install_dir }}"
+    owner: www-data
+    group: www-data
+    state: directory
+    recurse: yes
+
+- include_tasks: nginx.yaml
+  when: wp_webserver == "nginx"
+
+- name: MySql - Installation of dependancies
+  apt:
+    pkg: ["php-mysql", "python3-pymysql"]
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+  notify:
+    - Nginx - Restart

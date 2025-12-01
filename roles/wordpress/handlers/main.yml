@@ -1,0 +1,7 @@
+---
+# handlers file for wordpress
+- name: Nginx - Restart
+  service:
+    name: nginx
+    state: restarted
+# handlers file for wordpress

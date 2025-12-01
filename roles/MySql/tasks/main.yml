@@ -1,0 +1,55 @@
+- name: MySql - Installation of mysql-server
+  apt:
+    pkg: mysql-server
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: MySql - Installation of mariadb-server
+  apt:
+    pkg: mariadb-server
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: MySql - Starting of MariaDB
+  service:
+    name: mysql
+    state: started
+
+- name: Configure MySQL to listen on all interfaces
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+    backup: yes
+  notify: restart mysql
+
+- name: Ensure MySQL service is restarted
+  meta: flush_handlers
+
+- name: MySql - Create database
+  mysql_db:
+    name: "{{ wp_db_name }}"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: MySql - Create user with remote access
+  mysql_user:
+    name: "{{ wp_db_user }}"
+    password: "{{ wp_db_password }}"
+    host: "%"  # Allow from any host
+    priv: "{{ wp_db_name }}.*:ALL"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: MySql - Ensure root can connect from anywhere (if needed)
+  mysql_user:
+    name: root
+    host: "%"
+    password: "{{ mysql_root_password }}"
+    priv: "*.*:ALL"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock

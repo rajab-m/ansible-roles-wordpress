@@ -1,0 +1,35 @@
+---
+- name: Nginx - Find the location of PHP FPM socket
+  shell: dpkg -l | grep php-fpm  | awk '{print $3}' | grep -o '[0-9]\.[0-9]' | head -n 1
+  register: "php_ver"
+
+- name: Nginx - Starting of the service service php{{ php_ver.stdout }}
+  service:
+    name: "php{{ php_ver.stdout }}-fpm"
+    state: started
+
+- name: Nginx - Copy the configuration file of the virtual host
+  template:
+    src: "nginx-vhost.j2"
+    dest: "/etc/nginx/conf.d/wordpress.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Add server_names_hash_bucket_size to nginx.conf
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    line: "    server_names_hash_bucket_size 128;"    # very important to make it work with long DNS naming like the aws ones
+    insertafter: '^http {'
+    state: present
+
+- name: Nginx - Validate configuration syntax
+  command: nginx -t
+  register: nginx_validation
+  changed_when: false
+
+- name: Nginx - Start and enable nginx service
+  service:
+    name: "nginx"
+    state: started
+    enabled: yes

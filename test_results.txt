@@ -1,0 +1,27 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/datascientest/ansible-exam
+collecting ... collected 4 items
+
+test_connection.py::test_tcp_connection_from_web_to_db Remote TCP test output: SUCCESS
+PASSED
+test_connection.py::test_local_ssh_to_web SSH check output: SSH connection successful
+PASSED
+test_connection.py::test_local_http_to_web_dns HTTP response from web server DNS:
+<!DOCTYPE html>
+<html lang="en-US" xml:lang="en-US">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex,nofollow" />
+	<title>WordPress &rsaquo; Installation</title>
+	<link rel='stylesheet' id='dashicons-css' href='http://ec2-51-44-4-181.eu-west-3.compute.amazonaws.com/wp-includes/css/dashicons.min.css?ver=6.8.3' type='text/css' media='all' />
+<link rel='style
+PASSED
+test_connection.py::test_ssh_to_db_and_check_database_cli DB CLI check output: Database (datascientest)
+datascientest
+DB CLI check errors: mysql: [Warning] Using a password on the command line interface can be insecure.
+PASSED
+
+============================== 4 passed in 2.09s ===============================
