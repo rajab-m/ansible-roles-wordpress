@@ -11,7 +11,7 @@ Clone the repository and run your playbook to apply the role:
 ```
 git clone https://github.com/rajab-m/ansible-roles-wordpress.git
 cd ansible-roles-wordpress
-ansible-playbook -i inventory.ini site.yml
+ansible-playbook -i inventory.yaml install_wordpress.yaml
 ```
 > **Note:** you have to modify the ips, DNS and credentials values found in these files:
 > host_vars/db.yaml, host_vars/web.yaml, test_connection.py, roles/wordpress/defaults/main.yml, roles/MySql/defaults/main.yml, group_vars/all.yaml
