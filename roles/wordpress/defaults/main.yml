@@ -13,5 +13,5 @@ wp_version: latest
 wp_install_dir: "/var/www/html"
 
 #nginx
-wp_sitename: ec2-51-44-4-181.eu-west-3.compute.amazonaws.com
+wp_sitename: example.com
 
