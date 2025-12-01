@@ -1,5 +1,5 @@
 ---
 #mysql
-mysql_root_password: Datascientest2024
+mysql_root_password: root_password
 
 # defaults file for wordpress
